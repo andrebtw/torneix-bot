@@ -7,18 +7,11 @@ import random
 import time
 import json
 
-#colors
-color_list = [0xff0000,0x00ff00,0xffff00,0x0000ff,0xff00ff,0x00ffff,0xffffff]
-
 bot = commands.Bot(command_prefix = "t!")
 
 @bot.event
 async def on_ready():
 	print ("Connected")
-
-@bot.event
-async def on_message(message):
-	await bot.process_commands(message)
 		
 @bot.command(pass_context = True)
 async def ping(ctx):
