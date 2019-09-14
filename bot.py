@@ -6,12 +6,43 @@ import os
 import random
 import time
 import json
-
-bot = commands.Bot(command_prefix = "t!")
-
+ 
+#colors
+color_list = [0xff0000,0x00ff00,0xffff00,0x0000ff,0xff00ff,0x00ffff,0xffffff]
+ 
+#poop pics
+poop_pics=["https://miro.medium.com/max/1050/1*p_f8-fZS6VBeVzLWK-RXqw.png",
+"http://cdn.shopify.com/s/files/1/1061/1924/products/Poop_Emoji_7b204f05-eec6-4496-91b1-351acc03d2c7_grande.png?v=1480481059",
+"https://static.fnac-static.com/multimedia/Images/69/69/BA/9F/10467945-1505-1540-1/tsp20181206124851/Horloge-Emoji-Caca-Poop.jpg",
+"https://s7.orientaltrading.com/is/image/OrientalTrading/13798019?$PDP_VIEWER_IMAGE$",
+"https://cdn.shopify.com/s/files/1/1102/7446/products/NKX12948-Gold-The-Poop-Emoji-Necklace_1100x.jpg?v=1540190890",
+"https://www.petpooskiddoo.com/wp-content/uploads/2015/09/perfect_poop.png"]
+ 
+ 
+bot = commands.Bot(command_prefix = "a!")
+ 
 @bot.event
 async def on_ready():
 	print ("Connected")
+ 
+@bot.event
+async def on_member_join(member):
+	channel = bot.get_channel("531157558828990504")
+	await bot.send_message(channel, "Welcome on my server, I hope you will have a nice day here, Not forget to read the rules :wink: {} :joy:". format(member.mention))
+	print ("Nouveau membre : {}".format(member))
+ 
+	role = discord.utils.get(member.server.roles, name="™️Members™️")
+	await bot.add_roles(member, role)
+	print ("Role Members as been added to : {}".format(member))
+ 
+@bot.event
+async def on_member_remove(member):
+	channel = bot.get_channel("531157558828990504")
+	await bot.send_message(channel, "{} Just leave the server, good bye :confused:". format(member))
+ 
+@bot.event
+async def on_message(message):
+	await bot.process_commands(message)
 		
 @bot.command(pass_context = True)
 async def ping(ctx):
@@ -19,10 +50,55 @@ async def ping(ctx):
     diff = resp.timestamp - ctx.message.timestamp
     await bot.say(f"{1000*diff.total_seconds():.1f}ms")
     print ("Ping")
-
+ 
 	
-		
-		
+	
+@bot.command(pass_context=True)
+async def gay(ctx, arg1):
+	#sadly the bot detector doesnt work yet I have to fix this code lol
+	user=arg1
+	if user is not bot.user:
+		random_number=random.randint(0,100)
+		random_color=random.choice(color_list)
+		embed=discord.Embed(title=":gay_pride_flag: GAY RATE :gay_pride_flag:",description="{} IS {}% GAY".format(arg1, random_number), color=random_color)
+		msg = await ctx.bot.say(embed=embed)
+		print("{}% GAY".format(random_number))
+		loop = 0
+		while loop < 50:
+			random_color=random.choice(color_list)
+			embed=discord.Embed(title=":gay_pride_flag: GAY RATE :gay_pride_flag:",description="{} IS {}% GAY".format(arg1, random_number), color=random_color)
+			await ctx.bot.edit_message(msg,embed=embed)
+			loop=loop+1
+			await asyncio.sleep(1)
+	else:
+		embed=discord.Embed(title=":gay_pride_flag: GAY RATE :gay_pride_flag:",description="ARE BOTS GAY TOO ? :thinking:", color=0x62cee5)
+ 
+ 
+ 
+@gay.error
+async def gay_on_error(error,ctx):
+	random_number=random.randint(0,100)
+	random_color=random.choice(color_list)
+	embed=discord.Embed(title=":gay_pride_flag: GAY RATE :gay_pride_flag:",description="{}, YOU ARE {}% GAY".format(ctx.message.author,random_number), color=random_color)
+	msg = await bot.say(embed=embed)
+	print("{}% GAY".format(random_number))
+	loop = 0
+	while loop < 10:
+		random_color=random.choice(color_list)
+		embed=discord.Embed(title=":gay_pride_flag: GAY RATE :gay_pride_flag:",description="{}, YOU ARE {}% GAY".format(ctx.message.author,random_number), color=random_color)
+		await bot.edit_message(msg,embed=embed)
+		loop=loop+1
+		await asyncio.sleep(2)
+ 
+@bot.command()
+async def poop():
+	e = discord.Embed(color=0x663300)
+	print ("poop sent")
+	e.set_image(url=random.choice(poop_pics))
+	await bot.say(embed=e)
+
+
+
 #COLOR ROLES
 #Black
 @bot.command(pass_context=True)
